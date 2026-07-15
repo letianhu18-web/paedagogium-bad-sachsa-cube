@@ -1,58 +1,28 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, Compass, Home, MapPin, Pause, Play, RotateCcw, Shuffle, Users } from "lucide-react";
+import { ArrowRight, Compass, Gauge, MapPin, Pause, Play, Repeat2, RotateCcw, Shuffle, Users } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { cubeFaces, type CubeFaceId } from "@/data/site";
 import { CubeViewport } from "./CubeViewport";
-
-const evolutionSeeds = [731, 422, 187, 63, 0] as const;
+import type { CubeDemoCommand, CubeDemoCommandType } from "./types";
 
 export function CubeHome() {
   const [selectedFace, setSelectedFace] = useState<CubeFaceId | null>(null);
-  const [autoRotate, setAutoRotate] = useState(true);
-  const [evolutionStep, setEvolutionStep] = useState(0);
-  const [scrambleSeed, setScrambleSeed] = useState<number>(evolutionSeeds[0]);
-  const [resetKey, setResetKey] = useState(0);
+  const commandId = useRef(1);
+  const [command, setCommand] = useState<CubeDemoCommand>({ id: 1, type: "start" });
+  const [paused, setPaused] = useState(false);
+  const [speed, setSpeed] = useState(1);
+  const [loop, setLoop] = useState(true);
   const selected = cubeFaces.find((face) => face.id === selectedFace);
 
-  useEffect(() => {
-    if (!autoRotate) return;
-    const delay = evolutionStep === evolutionSeeds.length - 1 ? 6000 : 2900;
-    const timer = window.setTimeout(() => {
-      const nextStep = (evolutionStep + 1) % evolutionSeeds.length;
-      setEvolutionStep(nextStep);
-      setScrambleSeed(evolutionSeeds[nextStep]);
-    }, delay);
-    return () => window.clearTimeout(timer);
-  }, [autoRotate, evolutionStep]);
-
-  const resetCube = () => {
-    setScrambleSeed(0);
-    setEvolutionStep(evolutionSeeds.length - 1);
+  const sendCommand = (type: CubeDemoCommandType) => {
+    commandId.current += 1;
     setSelectedFace(null);
-    setResetKey((value) => value + 1);
+    setPaused(false);
+    setCommand({ id: commandId.current, type });
   };
-
-  const scrambleCube = () => {
-    setSelectedFace(null);
-    setEvolutionStep(0);
-    setScrambleSeed(Math.floor(Math.random() * 10_000) + 1);
-  };
-
-  const returnHome = () => {
-    setSelectedFace(null);
-    setEvolutionStep(0);
-    setScrambleSeed(evolutionSeeds[0]);
-    setResetKey((value) => value + 1);
-  };
-
-  const evolutionStatus = scrambleSeed === 0
-    ? "自动演变 · 已复原"
-    : evolutionStep === 0
-      ? "自动演变 · 初始打乱"
-      : `自动演变 · 阶段 ${evolutionStep + 1}/${evolutionSeeds.length}`;
 
   return (
     <div className="relative overflow-hidden">
@@ -71,30 +41,42 @@ export function CubeHome() {
         </div>
 
         <div className="mt-10 grid items-stretch gap-6 lg:grid-cols-[minmax(0,1.18fr)_minmax(360px,.82fr)]">
-          <div className="glass relative min-h-[420px] overflow-hidden rounded-[2rem] sm:min-h-[560px]">
-            <div className="absolute left-5 top-5 z-10 flex items-center gap-2 rounded-full border border-white/10 bg-[#080c16]/70 px-3 py-2 text-xs text-slate-300 backdrop-blur-md">
-              <span className="size-1.5 animate-pulse rounded-full bg-emerald-400" /> {evolutionStatus}
-            </div>
+          <div className="glass relative min-h-[600px] overflow-hidden rounded-[2rem] sm:min-h-[640px]">
             <CubeViewport
               selectedFace={selectedFace}
-              autoRotate={autoRotate}
-              scrambleSeed={scrambleSeed}
-              resetKey={resetKey}
+              command={command}
+              paused={paused}
+              speed={speed}
+              loop={loop}
               onSelect={setSelectedFace}
             />
-            <div className="absolute inset-x-4 bottom-4 z-10 flex flex-wrap justify-center gap-2">
-              <button type="button" onClick={scrambleCube} className="focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#080c16]/75 px-3.5 py-2 text-xs text-slate-200 backdrop-blur-md transition hover:bg-white/10">
-                <Shuffle size={14} /> 打乱魔方
-              </button>
-              <button type="button" onClick={resetCube} className="focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#080c16]/75 px-3.5 py-2 text-xs text-slate-200 backdrop-blur-md transition hover:bg-white/10">
-                <RotateCcw size={14} /> 复原魔方
-              </button>
-              <button type="button" onClick={() => setAutoRotate((value) => !value)} className="focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#080c16]/75 px-3.5 py-2 text-xs text-slate-200 backdrop-blur-md transition hover:bg-white/10">
-                {autoRotate ? <Pause size={14} /> : <Play size={14} />} 自动旋转
-              </button>
-              <button type="button" onClick={returnHome} className="focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#080c16]/75 px-3.5 py-2 text-xs text-slate-200 backdrop-blur-md transition hover:bg-white/10">
-                <Home size={14} /> 返回首页
-              </button>
+            <div className="absolute inset-x-3 bottom-3 z-10 rounded-2xl border border-white/10 bg-[#080c16]/80 p-2.5 shadow-2xl backdrop-blur-xl sm:inset-x-4 sm:bottom-4 sm:p-3">
+              <div className="flex flex-wrap justify-center gap-2" role="group" aria-label="魔方演示控制">
+                <button type="button" onClick={() => sendCommand("start")} className="focus-ring inline-flex items-center gap-2 rounded-xl bg-blue-500 px-3 py-2 text-xs font-medium text-white transition hover:bg-blue-400">
+                  <Play size={14} /> 开始演示
+                </button>
+                <button type="button" onClick={() => setPaused(true)} disabled={paused} className="focus-ring inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40">
+                  <Pause size={14} /> 暂停
+                </button>
+                <button type="button" onClick={() => setPaused(false)} disabled={!paused} className="focus-ring inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40">
+                  <Play size={14} /> 继续
+                </button>
+                <button type="button" onClick={() => sendCommand("restart")} className="focus-ring inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-200 transition hover:bg-white/10">
+                  <RotateCcw size={14} /> 重新开始
+                </button>
+                <button type="button" onClick={() => sendCommand("randomize")} className="focus-ring inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-slate-200 transition hover:bg-white/10">
+                  <Shuffle size={14} /> 重新随机打乱
+                </button>
+                <button type="button" aria-pressed={loop} onClick={() => setLoop((value) => !value)} className={`focus-ring inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs transition ${loop ? "border-emerald-300/30 bg-emerald-400/12 text-emerald-200" : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"}`}>
+                  <Repeat2 size={14} /> 循环播放
+                </button>
+              </div>
+              <label className="mx-auto mt-2.5 flex max-w-md items-center gap-3 px-1 text-xs text-slate-300">
+                <Gauge size={15} className="shrink-0 text-slate-500" />
+                <span className="shrink-0">动画速度</span>
+                <input type="range" min="0.5" max="1.8" step="0.05" value={speed} onChange={(event) => setSpeed(Number(event.target.value))} className="h-1.5 w-full cursor-pointer accent-blue-400" />
+                <span className="w-10 shrink-0 text-right font-mono text-slate-400">{speed.toFixed(1)}×</span>
+              </label>
             </div>
           </div>
 
@@ -132,7 +114,7 @@ export function CubeHome() {
                     <Link href="/teachers" className="focus-ring inline-flex items-center justify-center gap-2 rounded-2xl border border-white/12 bg-white/5 px-4 py-3.5 text-sm font-medium text-white transition hover:bg-white/10"><Users size={16} /> 查看教师</Link>
                   </div>
                   <div className="mt-auto rounded-2xl border border-white/8 bg-white/[0.025] p-4 text-sm leading-6 text-slate-400">
-                    <strong className="text-slate-200">操作提示</strong><br />拖动或触摸旋转 · 滚轮或双指缩放 · 悬停高亮 · 点击选面
+                    <strong className="text-slate-200">操作</strong><br />拖动或触摸改变视角 · 滚轮或双指缩放 · 点击彩色贴纸选择栏目
                   </div>
                 </motion.div>
               )}

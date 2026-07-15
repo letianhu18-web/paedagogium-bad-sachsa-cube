@@ -4,11 +4,12 @@ import dynamic from "next/dynamic";
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import type { CubeFaceId } from "@/data/site";
 import { CubeFallback } from "./CubeFallback";
+import type { CubeDemoCommand } from "./types";
 
 const RubiksCubeScene = dynamic(() => import("./RubiksCubeScene").then((module) => module.RubiksCubeScene), {
   ssr: false,
   loading: () => (
-    <div className="grid h-full min-h-[420px] place-items-center" role="status">
+    <div className="grid h-full min-h-[600px] place-items-center" role="status">
       <div className="text-center">
         <div className="mx-auto size-12 animate-spin rounded-2xl border-2 border-blue-400/20 border-t-blue-400" />
         <p className="mt-4 text-sm text-slate-400">正在加载 3D 魔方…</p>
@@ -19,9 +20,10 @@ const RubiksCubeScene = dynamic(() => import("./RubiksCubeScene").then((module) 
 
 interface CubeViewportProps {
   selectedFace: CubeFaceId | null;
-  autoRotate: boolean;
-  scrambleSeed: number;
-  resetKey: number;
+  command: CubeDemoCommand;
+  paused: boolean;
+  speed: number;
+  loop: boolean;
   onSelect: (face: CubeFaceId) => void;
 }
 
