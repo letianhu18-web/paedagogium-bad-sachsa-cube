@@ -2,6 +2,8 @@
 
 一个以互动 3D 魔方为入口的中文学校介绍网站。魔方默认从打乱状态开始自动旋转，贴纸会分阶段平滑变化、自动复原并重新进入下一轮。内容以 Pädagogium Bad Sachsa 学校官网公开资料为主，包含学校、历史、管理团队、教师、寄宿生活、联系方式与逐条来源。
 
+在线网站：https://letianhu18-web.github.io/paedagogium-bad-sachsa-cube/
+
 ## 安装与运行
 
 需要 Node.js 20.9 或更高版本。

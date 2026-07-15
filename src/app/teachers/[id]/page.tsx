@@ -5,6 +5,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { SourceAnchor } from "@/components/SourceAnchor";
 import { teacherInitials, teachers } from "@/data/teachers";
+import { withBasePath } from "@/lib/site-path";
 
 interface TeacherPageProps {
   params: Promise<{ id: string }>;
@@ -34,7 +35,7 @@ export default async function TeacherDetailPage({ params }: TeacherPageProps) {
           <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center">
             {teacher.photo ? (
               <span className="relative block size-28 shrink-0 overflow-hidden rounded-[2rem] ring-1 ring-white/12 sm:size-32">
-                <Image src={teacher.photo} alt={`${teacher.name} 的学校官网照片`} fill priority className="object-cover object-top" sizes="128px" />
+                <Image src={withBasePath(teacher.photo)} alt={`${teacher.name} 的学校官网照片`} fill priority className="object-cover object-top" sizes="128px" />
               </span>
             ) : (
               <span className="grid size-28 shrink-0 place-items-center rounded-[2rem] bg-emerald-400/10 text-2xl font-semibold text-emerald-200 ring-1 ring-emerald-300/20 sm:size-32">{teacherInitials(teacher.name)}</span>

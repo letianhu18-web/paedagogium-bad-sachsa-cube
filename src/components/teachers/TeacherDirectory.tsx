@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { teacherCategories, teacherInitials, teachers, type SubjectCategory } from "@/data/teachers";
+import { withBasePath } from "@/lib/site-path";
 
 type CategoryFilter = "全部" | SubjectCategory;
 
@@ -68,7 +69,7 @@ export function TeacherDirectory() {
                 <div className="flex items-start justify-between gap-4">
                   {teacher.photo ? (
                     <span className="relative block size-16 shrink-0 overflow-hidden rounded-2xl ring-1 ring-white/10">
-                      <Image src={teacher.photo} alt={`${teacher.name} 的学校官网照片`} fill className="object-cover object-top" sizes="64px" />
+                      <Image src={withBasePath(teacher.photo)} alt={`${teacher.name} 的学校官网照片`} fill className="object-cover object-top" sizes="64px" />
                     </span>
                   ) : (
                     <span className="grid size-16 shrink-0 place-items-center rounded-2xl text-sm font-semibold ring-1 ring-white/10" style={{ background: `${categoryColors[dominant]}22`, color: categoryColors[dominant] }}>{teacherInitials(teacher.name)}</span>

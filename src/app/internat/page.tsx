@@ -3,6 +3,7 @@ import Image from "next/image";
 import { BookMarked, Clock3, Globe2, House, UsersRound } from "lucide-react";
 import { PageIntro } from "@/components/PageIntro";
 import { SourceAnchor } from "@/components/SourceAnchor";
+import { withBasePath } from "@/lib/site-path";
 
 export const metadata: Metadata = { title: "寄宿学校" };
 
@@ -14,7 +15,7 @@ export default function InternatPage() {
       <PageIntro eyebrow="白色面 · INTERNAT" title="寄宿学校" subtitle="Leben und Lernen im Internat" description="寄宿部把共同生活、学习支持和课外成长连接起来。官网强调，学习不仅需要头脑，也需要“Herz und Hände｜心与双手”。" accent="#e2e8f0" />
       <section className="mx-auto mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="glass relative min-h-[360px] overflow-hidden rounded-[2rem] sm:min-h-[520px]">
-          <Image src="/images/internat-life.jpg" alt="Pädagogium Bad Sachsa 寄宿学生共同活动的官网照片" fill priority className="object-cover" sizes="100vw" />
+          <Image src={withBasePath("/images/internat-life.jpg")} alt="Pädagogium Bad Sachsa 寄宿学生共同活动的官网照片" fill priority className="object-cover" sizes="100vw" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#070a12] via-[#070a12]/20 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 max-w-3xl p-6 sm:p-10">
             <p className="font-mono text-xs text-slate-300">Schüler*innen im Internat · September 2024</p>

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { BookOpen, Building2, GraduationCap, HeartHandshake, MapPin, School, Trees } from "lucide-react";
 import { PageIntro } from "@/components/PageIntro";
 import { SourceAnchor } from "@/components/SourceAnchor";
+import { withBasePath } from "@/lib/site-path";
 
 export const metadata: Metadata = { title: "学校介绍" };
 
@@ -39,7 +40,7 @@ export default function SchoolPage() {
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[1.08fr_.92fr]">
           <div className="glass relative min-h-[360px] overflow-hidden rounded-[2rem] sm:min-h-[480px]">
-            <Image src="/images/school-campus.jpg" alt="Pädagogium Bad Sachsa 校园主楼与校园环境" fill priority className="object-cover" sizes="(max-width: 1024px) 100vw, 58vw" />
+            <Image src={withBasePath("/images/school-campus.jpg")} alt="Pädagogium Bad Sachsa 校园主楼与校园环境" fill priority className="object-cover" sizes="(max-width: 1024px) 100vw, 58vw" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#080c17] via-transparent to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
               <div className="inline-flex items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-xs text-slate-200 backdrop-blur"><MapPin size={13} /> Ostertal · Bad Sachsa</div>
