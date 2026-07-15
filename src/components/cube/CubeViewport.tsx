@@ -1,0 +1,50 @@
+"use client";
+
+import dynamic from "next/dynamic";
+import { Component, type ErrorInfo, type ReactNode } from "react";
+import type { CubeFaceId } from "@/data/site";
+import { CubeFallback } from "./CubeFallback";
+
+const RubiksCubeScene = dynamic(() => import("./RubiksCubeScene").then((module) => module.RubiksCubeScene), {
+  ssr: false,
+  loading: () => (
+    <div className="grid h-full min-h-[420px] place-items-center" role="status">
+      <div className="text-center">
+        <div className="mx-auto size-12 animate-spin rounded-2xl border-2 border-blue-400/20 border-t-blue-400" />
+        <p className="mt-4 text-sm text-slate-400">正在加载 3D 魔方…</p>
+      </div>
+    </div>
+  ),
+});
+
+interface CubeViewportProps {
+  selectedFace: CubeFaceId | null;
+  autoRotate: boolean;
+  scrambleSeed: number;
+  resetKey: number;
+  onSelect: (face: CubeFaceId) => void;
+}
+
+class CubeErrorBoundary extends Component<{ children: ReactNode; onSelect: (face: CubeFaceId) => void }, { failed: boolean }> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("3D cube unavailable", error, info.componentStack);
+  }
+
+  render() {
+    return this.state.failed ? <CubeFallback onSelect={this.props.onSelect} /> : this.props.children;
+  }
+}
+
+export function CubeViewport(props: CubeViewportProps) {
+  return (
+    <CubeErrorBoundary onSelect={props.onSelect}>
+      <RubiksCubeScene {...props} />
+    </CubeErrorBoundary>
+  );
+}
