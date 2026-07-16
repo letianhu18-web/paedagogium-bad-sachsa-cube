@@ -32,7 +32,7 @@ export function CubeHome() {
             <Compass size={13} /> 旋转 · 点击 · 探索
           </div>
           <h1 className="text-balance text-4xl font-semibold tracking-[-0.055em] text-[#f5f8ed] sm:text-6xl lg:text-7xl">
-            魔方里的 <span className="jade-title">Pädagogium Bad Sachsa</span>
+            <span className="jade-title">badsachsa</span>
           </h1>
           <p className="mt-4 font-mono text-xs tracking-[0.12em] text-emerald-100/38 sm:text-sm">Das Pädagogium Bad Sachsa im Zauberwürfel</p>
           <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-7 text-emerald-50/70 sm:text-lg">

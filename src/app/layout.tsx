@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "魔方里的 Pädagogium Bad Sachsa",
-    template: "%s｜Pädagogium Bad Sachsa",
+    default: "badsachsa",
+    template: "%s｜badsachsa",
   },
   description: "通过互动三维魔方，用中文了解 Pädagogium Bad Sachsa 的学校、历史、教师与寄宿生活。",
 };
