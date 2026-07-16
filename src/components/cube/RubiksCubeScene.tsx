@@ -81,12 +81,12 @@ const faces: {
   rotation: Vec3;
   visible: (x: number, y: number, z: number) => boolean;
 }[] = [
-  { id: "school", numeral: "壹", color: "#4f9d79", normal: [0, 0, 1], rotation: [0, 0, 0], visible: (_x, _y, z) => z === 1 },
-  { id: "history", numeral: "貳", color: "#3e8266", normal: [0, 0, -1], rotation: [0, Math.PI, 0], visible: (_x, _y, z) => z === -1 },
-  { id: "leadership", numeral: "參", color: "#75a97f", normal: [0, 1, 0], rotation: [-Math.PI / 2, 0, 0], visible: (_x, y) => y === 1 },
-  { id: "teachers", numeral: "肆", color: "#2f7359", normal: [1, 0, 0], rotation: [0, Math.PI / 2, 0], visible: (x) => x === 1 },
-  { id: "internat", numeral: "伍", color: "#b8cdb3", normal: [-1, 0, 0], rotation: [0, -Math.PI / 2, 0], visible: (x) => x === -1 },
-  { id: "contact", numeral: "陸", color: "#8cac74", normal: [0, -1, 0], rotation: [Math.PI / 2, 0, 0], visible: (_x, y) => y === -1 },
+  { id: "school", numeral: "壹", color: "#9ec9b0", normal: [0, 0, 1], rotation: [0, 0, 0], visible: (_x, _y, z) => z === 1 },
+  { id: "history", numeral: "貳", color: "#86b89f", normal: [0, 0, -1], rotation: [0, Math.PI, 0], visible: (_x, _y, z) => z === -1 },
+  { id: "leadership", numeral: "參", color: "#c8d9b8", normal: [0, 1, 0], rotation: [-Math.PI / 2, 0, 0], visible: (_x, y) => y === 1 },
+  { id: "teachers", numeral: "肆", color: "#70a990", normal: [1, 0, 0], rotation: [0, Math.PI / 2, 0], visible: (x) => x === 1 },
+  { id: "internat", numeral: "伍", color: "#edf2e2", normal: [-1, 0, 0], rotation: [0, -Math.PI / 2, 0], visible: (x) => x === -1 },
+  { id: "contact", numeral: "陸", color: "#b7cb9b", normal: [0, -1, 0], rotation: [Math.PI / 2, 0, 0], visible: (_x, y) => y === -1 },
 ];
 
 const jadeTextureCache = new Map<string, { color: CanvasTexture; bump: CanvasTexture }>();
@@ -115,9 +115,10 @@ function getEngravedJadeTextures(face: (typeof faces)[number]) {
   if (!context || !bumpContext) throw new Error("Canvas 2D is unavailable");
 
   const glow = context.createRadialGradient(78, 58, 8, 128, 128, 205);
-  glow.addColorStop(0, "rgba(244,255,238,.3)");
-  glow.addColorStop(0.42, face.color);
-  glow.addColorStop(1, "#174f3b");
+  glow.addColorStop(0, "rgba(255,255,238,.62)");
+  glow.addColorStop(0.38, face.color);
+  glow.addColorStop(0.78, face.color);
+  glow.addColorStop(1, "#4d7965");
   context.fillStyle = glow;
   context.fillRect(0, 0, size, size);
 
@@ -126,10 +127,22 @@ function getEngravedJadeTextures(face: (typeof faces)[number]) {
     context.beginPath();
     context.moveTo(-20, random() * size);
     context.bezierCurveTo(58, random() * size, 158, random() * size, size + 20, random() * size);
-    context.strokeStyle = line % 2 === 0 ? "rgba(225,245,228,.08)" : "rgba(4,49,34,.1)";
+    context.strokeStyle = line % 2 === 0 ? "rgba(247,249,226,.15)" : "rgba(33,91,67,.11)";
     context.lineWidth = 0.8 + random() * 2.2;
     context.stroke();
   }
+
+  context.save();
+  context.beginPath();
+  context.arc(40, 204, 19, Math.PI, Math.PI * 2);
+  context.arc(78, 204, 19, Math.PI, Math.PI * 2);
+  context.arc(116, 204, 19, Math.PI, Math.PI * 2);
+  context.arc(191, 48, 17, 0, Math.PI);
+  context.arc(223, 48, 17, 0, Math.PI);
+  context.strokeStyle = "rgba(245,239,203,.17)";
+  context.lineWidth = 2;
+  context.stroke();
+  context.restore();
 
   const font = '700 142px "STKaiti", "KaiTi", "Noto Serif SC", serif';
   context.save();
@@ -137,17 +150,17 @@ function getEngravedJadeTextures(face: (typeof faces)[number]) {
   context.textAlign = "center";
   context.textBaseline = "middle";
   context.lineJoin = "round";
-  context.shadowColor = "rgba(0,24,16,.72)";
-  context.shadowBlur = 5;
+  context.shadowColor = "rgba(0,31,21,.78)";
+  context.shadowBlur = 6;
   context.shadowOffsetX = 3;
   context.shadowOffsetY = 4;
-  context.strokeStyle = "rgba(4,47,32,.92)";
+  context.strokeStyle = "rgba(10,58,40,.94)";
   context.lineWidth = 8;
   context.strokeText(face.numeral, 130, 132);
-  context.fillStyle = "rgba(5,48,33,.88)";
+  context.fillStyle = "rgba(6,51,35,.9)";
   context.fillText(face.numeral, 129, 131);
   context.shadowColor = "transparent";
-  context.strokeStyle = "rgba(235,230,183,.34)";
+  context.strokeStyle = "rgba(255,245,202,.48)";
   context.lineWidth = 1.7;
   context.strokeText(face.numeral, 126.5, 127.5);
   context.restore();
@@ -286,11 +299,16 @@ function Sticker({ face, onSelect }: { face: (typeof faces)[number]; onSelect: (
         color="#ffffff"
         map={textures.color}
         bumpMap={textures.bump}
-        bumpScale={0.055}
-        roughness={0.18}
+        bumpScale={0.068}
+        roughness={0.16}
         metalness={0.02}
         clearcoat={1}
-        clearcoatRoughness={0.08}
+        clearcoatRoughness={0.07}
+        sheen={0.48}
+        sheenColor="#f4f1cf"
+        sheenRoughness={0.3}
+        iridescence={0.1}
+        iridescenceIOR={1.3}
         emissive="#123d2d"
         emissiveIntensity={hovered ? 0.2 : 0.025}
       />
@@ -313,11 +331,26 @@ function Cubie({ definition, register, onSelect }: {
   return (
     <group ref={group} position={definition.position}>
       <RoundedBox args={[0.89, 0.89, 0.89]} radius={0.065} smoothness={3} castShadow receiveShadow>
-        <meshPhysicalMaterial color="#082d22" roughness={0.17} metalness={0.04} clearcoat={1} clearcoatRoughness={0.09} emissive="#03140f" emissiveIntensity={0.08} />
+        <meshPhysicalMaterial color="#817447" roughness={0.24} metalness={0.2} clearcoat={0.82} clearcoatRoughness={0.16} emissive="#392f16" emissiveIntensity={0.06} />
       </RoundedBox>
       {faces
         .filter((face) => face.visible(...definition.coord))
         .map((face) => <Sticker key={face.id} face={face} onSelect={onSelect} />)}
+    </group>
+  );
+}
+
+function CelestialPedestal() {
+  return (
+    <group position={[0, -1.82, 0]}>
+      <mesh receiveShadow>
+        <cylinderGeometry args={[2.25, 2.48, 0.18, 8]} />
+        <meshPhysicalMaterial color="#b9d0bb" roughness={0.24} metalness={0.02} clearcoat={0.9} clearcoatRoughness={0.12} />
+      </mesh>
+      <mesh position={[0, 0.095, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[1.76, 2.18, 8]} />
+        <meshStandardMaterial color="#bca96b" roughness={0.34} metalness={0.28} />
+      </mesh>
     </group>
   );
 }
@@ -512,13 +545,15 @@ export function RubiksCubeScene(props: SceneProps) {
   return (
     <div className="h-full min-h-[600px] touch-none sm:min-h-[640px]">
       <Canvas shadows="percentage" camera={CAMERA_CONFIG} dpr={DPR_RANGE} gl={{ antialias: true, alpha: true }}>
-        <ambientLight intensity={0.66} />
-        <hemisphereLight args={["#e3f5e8", "#03130f", 1.42]} />
-        <spotLight position={[5.5, 8, 5]} intensity={72} angle={0.42} penumbra={0.8} color="#eef7df" castShadow shadow-mapSize={SHADOW_MAP_SIZE} />
-        <directionalLight position={[-5, 1, -4]} intensity={1.85} color="#65c694" />
-        <pointLight position={[0, -1, 5]} intensity={10} color="#f1d79c" />
+        <ambientLight intensity={0.82} />
+        <hemisphereLight args={["#f4f5dd", "#0a3026", 1.55]} />
+        <spotLight position={[5.5, 8, 5]} intensity={78} angle={0.44} penumbra={0.82} color="#fffbe3" castShadow shadow-mapSize={SHADOW_MAP_SIZE} />
+        <directionalLight position={[-5, 1, -4]} intensity={2.05} color="#9ed8b7" />
+        <pointLight position={[0, -1, 5]} intensity={11} color="#f4dca0" />
+        <pointLight position={[-4, 3, 1]} intensity={7} color="#d9f0dd" />
+        <CelestialPedestal />
         <CubeModel {...props} />
-        <ContactShadows position={[0, -2.05, 0]} opacity={0.44} scale={9} blur={2.5} far={4.5} color="#001b12" />
+        <ContactShadows position={[0, -1.71, 0]} opacity={0.34} scale={5.2} blur={2.1} far={2.8} color="#173d2e" />
         <OrbitControls enablePan={false} enableZoom enableDamping dampingFactor={0.075} minDistance={5} maxDistance={10} rotateSpeed={0.62} zoomSpeed={0.72} />
       </Canvas>
     </div>

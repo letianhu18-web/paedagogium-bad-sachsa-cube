@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-emerald-100/10 bg-[#020d0a]/36">
+    <footer className="mt-24 border-t border-amber-100/10 bg-[#031510]/44 shadow-[inset_0_1px_0_rgba(237,222,171,0.025)]">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-10 text-sm text-emerald-100/45 sm:px-6 lg:flex-row lg:items-end lg:justify-between lg:px-8">
         <div className="max-w-2xl space-y-2">
           <p className="text-emerald-50/75">本网站是学生制作的非官方网站，内容整理自公开资料。</p>

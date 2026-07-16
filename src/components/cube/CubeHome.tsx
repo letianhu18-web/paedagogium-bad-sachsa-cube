@@ -41,7 +41,7 @@ export function CubeHome() {
         </div>
 
         <div className="mt-10 grid items-stretch gap-6 lg:grid-cols-[minmax(0,1.18fr)_minmax(360px,.82fr)]">
-          <div className="glass relative min-h-[600px] overflow-hidden rounded-[2rem] sm:min-h-[640px]">
+          <div className="glass palace-panel relative min-h-[600px] overflow-hidden rounded-[2rem] sm:min-h-[640px]">
             <CubeViewport
               selectedFace={selectedFace}
               command={command}
@@ -80,7 +80,7 @@ export function CubeHome() {
             </div>
           </div>
 
-          <aside className="glass flex min-h-[420px] flex-col rounded-[2rem] p-6 sm:p-8" aria-live="polite">
+          <aside className="glass palace-panel flex min-h-[420px] flex-col rounded-[2rem] p-6 sm:p-8" aria-live="polite">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.18em] text-amber-200/55">Selected face</p>

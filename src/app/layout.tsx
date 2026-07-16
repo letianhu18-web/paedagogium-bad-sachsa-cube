@@ -27,6 +27,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="zh-CN" data-scroll-behavior="smooth" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="min-h-screen antialiased">
         <div className="site-grid pointer-events-none fixed inset-0 -z-20" />
+        <div className="palace-frame" aria-hidden="true" />
         <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
           <span className="particle absolute left-[8%] top-[18%] size-1 rounded-full bg-emerald-200 text-emerald-200" />
           <span className="particle absolute left-[78%] top-[26%] size-1.5 rounded-full bg-[#e8eedc] text-[#e8eedc] [animation-delay:2s]" />
