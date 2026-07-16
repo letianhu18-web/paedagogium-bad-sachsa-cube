@@ -2,8 +2,8 @@
 
 import { ContactShadows, OrbitControls, RoundedBox } from "@react-three/drei";
 import { Canvas, type ThreeEvent, useFrame } from "@react-three/fiber";
-import { useCallback, useEffect, useEffectEvent, useRef, useState } from "react";
-import { Euler, Group, MathUtils, Quaternion, Vector3 } from "three";
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from "react";
+import { CanvasTexture, Euler, Group, MathUtils, Quaternion, SRGBColorSpace, Vector3 } from "three";
 import type { CubeFaceId } from "@/data/site";
 import type { CubeDemoCommand, CubeDemoCommandType } from "./types";
 
@@ -75,18 +75,104 @@ const AXIS_VECTORS: Record<Axis, Vector3> = {
 
 const faces: {
   id: CubeFaceId;
+  numeral: string;
   color: string;
   normal: Vec3;
   rotation: Vec3;
   visible: (x: number, y: number, z: number) => boolean;
 }[] = [
-  { id: "school", color: "#2563eb", normal: [0, 0, 1], rotation: [0, 0, 0], visible: (_x, _y, z) => z === 1 },
-  { id: "history", color: "#ef4444", normal: [0, 0, -1], rotation: [0, Math.PI, 0], visible: (_x, _y, z) => z === -1 },
-  { id: "leadership", color: "#facc15", normal: [0, 1, 0], rotation: [-Math.PI / 2, 0, 0], visible: (_x, y) => y === 1 },
-  { id: "teachers", color: "#22c55e", normal: [1, 0, 0], rotation: [0, Math.PI / 2, 0], visible: (x) => x === 1 },
-  { id: "internat", color: "#f8fafc", normal: [-1, 0, 0], rotation: [0, -Math.PI / 2, 0], visible: (x) => x === -1 },
-  { id: "contact", color: "#f97316", normal: [0, -1, 0], rotation: [Math.PI / 2, 0, 0], visible: (_x, y) => y === -1 },
+  { id: "school", numeral: "壹", color: "#4f9d79", normal: [0, 0, 1], rotation: [0, 0, 0], visible: (_x, _y, z) => z === 1 },
+  { id: "history", numeral: "貳", color: "#3e8266", normal: [0, 0, -1], rotation: [0, Math.PI, 0], visible: (_x, _y, z) => z === -1 },
+  { id: "leadership", numeral: "參", color: "#75a97f", normal: [0, 1, 0], rotation: [-Math.PI / 2, 0, 0], visible: (_x, y) => y === 1 },
+  { id: "teachers", numeral: "肆", color: "#2f7359", normal: [1, 0, 0], rotation: [0, Math.PI / 2, 0], visible: (x) => x === 1 },
+  { id: "internat", numeral: "伍", color: "#b8cdb3", normal: [-1, 0, 0], rotation: [0, -Math.PI / 2, 0], visible: (x) => x === -1 },
+  { id: "contact", numeral: "陸", color: "#8cac74", normal: [0, -1, 0], rotation: [Math.PI / 2, 0, 0], visible: (_x, y) => y === -1 },
 ];
+
+const jadeTextureCache = new Map<string, { color: CanvasTexture; bump: CanvasTexture }>();
+
+function seededRandom(seed: number) {
+  let value = seed;
+  return () => {
+    value = (value * 9301 + 49297) % 233280;
+    return value / 233280;
+  };
+}
+
+function getEngravedJadeTextures(face: (typeof faces)[number]) {
+  const cached = jadeTextureCache.get(face.id);
+  if (cached) return cached;
+
+  const size = 256;
+  const colorCanvas = document.createElement("canvas");
+  colorCanvas.width = size;
+  colorCanvas.height = size;
+  const context = colorCanvas.getContext("2d");
+  const bumpCanvas = document.createElement("canvas");
+  bumpCanvas.width = size;
+  bumpCanvas.height = size;
+  const bumpContext = bumpCanvas.getContext("2d");
+  if (!context || !bumpContext) throw new Error("Canvas 2D is unavailable");
+
+  const glow = context.createRadialGradient(78, 58, 8, 128, 128, 205);
+  glow.addColorStop(0, "rgba(244,255,238,.3)");
+  glow.addColorStop(0.42, face.color);
+  glow.addColorStop(1, "#174f3b");
+  context.fillStyle = glow;
+  context.fillRect(0, 0, size, size);
+
+  const random = seededRandom(face.numeral.charCodeAt(0));
+  for (let line = 0; line < 7; line += 1) {
+    context.beginPath();
+    context.moveTo(-20, random() * size);
+    context.bezierCurveTo(58, random() * size, 158, random() * size, size + 20, random() * size);
+    context.strokeStyle = line % 2 === 0 ? "rgba(225,245,228,.08)" : "rgba(4,49,34,.1)";
+    context.lineWidth = 0.8 + random() * 2.2;
+    context.stroke();
+  }
+
+  const font = '700 142px "STKaiti", "KaiTi", "Noto Serif SC", serif';
+  context.save();
+  context.font = font;
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.lineJoin = "round";
+  context.shadowColor = "rgba(0,24,16,.72)";
+  context.shadowBlur = 5;
+  context.shadowOffsetX = 3;
+  context.shadowOffsetY = 4;
+  context.strokeStyle = "rgba(4,47,32,.92)";
+  context.lineWidth = 8;
+  context.strokeText(face.numeral, 130, 132);
+  context.fillStyle = "rgba(5,48,33,.88)";
+  context.fillText(face.numeral, 129, 131);
+  context.shadowColor = "transparent";
+  context.strokeStyle = "rgba(235,230,183,.34)";
+  context.lineWidth = 1.7;
+  context.strokeText(face.numeral, 126.5, 127.5);
+  context.restore();
+
+  bumpContext.fillStyle = "#f2f2f2";
+  bumpContext.fillRect(0, 0, size, size);
+  bumpContext.font = font;
+  bumpContext.textAlign = "center";
+  bumpContext.textBaseline = "middle";
+  bumpContext.lineJoin = "round";
+  bumpContext.strokeStyle = "#222222";
+  bumpContext.lineWidth = 10;
+  bumpContext.strokeText(face.numeral, 129, 131);
+  bumpContext.fillStyle = "#080808";
+  bumpContext.fillText(face.numeral, 129, 131);
+
+  const colorTexture = new CanvasTexture(colorCanvas);
+  colorTexture.colorSpace = SRGBColorSpace;
+  colorTexture.anisotropy = 4;
+  const bumpTexture = new CanvasTexture(bumpCanvas);
+  bumpTexture.anisotropy = 4;
+  const textures = { color: colorTexture, bump: bumpTexture };
+  jadeTextureCache.set(face.id, textures);
+  return textures;
+}
 
 const cubieDefinitions: CubieDefinition[] = [];
 for (const x of GRID) {
@@ -171,6 +257,7 @@ function generateScramble(): Move[] {
 
 function Sticker({ face, onSelect }: { face: (typeof faces)[number]; onSelect: (face: CubeFaceId) => void }) {
   const [hovered, setHovered] = useState(false);
+  const textures = useMemo(() => getEngravedJadeTextures(face), [face]);
   const position = face.normal.map((value) => value * 0.456) as Vec3;
 
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
@@ -196,13 +283,16 @@ function Sticker({ face, onSelect }: { face: (typeof faces)[number]; onSelect: (
     >
       <planeGeometry args={[0.76, 0.76]} />
       <meshPhysicalMaterial
-        color={face.color}
-        roughness={0.28}
-        metalness={0.03}
-        clearcoat={0.7}
-        clearcoatRoughness={0.22}
-        emissive={face.color}
-        emissiveIntensity={hovered ? 0.16 : 0.025}
+        color="#ffffff"
+        map={textures.color}
+        bumpMap={textures.bump}
+        bumpScale={0.055}
+        roughness={0.18}
+        metalness={0.02}
+        clearcoat={1}
+        clearcoatRoughness={0.08}
+        emissive="#123d2d"
+        emissiveIntensity={hovered ? 0.2 : 0.025}
       />
     </mesh>
   );
@@ -223,7 +313,7 @@ function Cubie({ definition, register, onSelect }: {
   return (
     <group ref={group} position={definition.position}>
       <RoundedBox args={[0.89, 0.89, 0.89]} radius={0.065} smoothness={3} castShadow receiveShadow>
-        <meshPhysicalMaterial color="#07090d" roughness={0.38} metalness={0.26} clearcoat={0.28} clearcoatRoughness={0.35} />
+        <meshPhysicalMaterial color="#082d22" roughness={0.17} metalness={0.04} clearcoat={1} clearcoatRoughness={0.09} emissive="#03140f" emissiveIntensity={0.08} />
       </RoundedBox>
       {faces
         .filter((face) => face.visible(...definition.coord))
@@ -422,13 +512,13 @@ export function RubiksCubeScene(props: SceneProps) {
   return (
     <div className="h-full min-h-[600px] touch-none sm:min-h-[640px]">
       <Canvas shadows="percentage" camera={CAMERA_CONFIG} dpr={DPR_RANGE} gl={{ antialias: true, alpha: true }}>
-        <ambientLight intensity={0.72} />
-        <hemisphereLight args={["#dbeafe", "#090b12", 1.35]} />
-        <spotLight position={[5.5, 8, 5]} intensity={70} angle={0.42} penumbra={0.78} castShadow shadow-mapSize={SHADOW_MAP_SIZE} />
-        <directionalLight position={[-5, 1, -4]} intensity={1.7} color="#79a7ff" />
-        <pointLight position={[0, -1, 5]} intensity={9} color="#ffffff" />
+        <ambientLight intensity={0.66} />
+        <hemisphereLight args={["#e3f5e8", "#03130f", 1.42]} />
+        <spotLight position={[5.5, 8, 5]} intensity={72} angle={0.42} penumbra={0.8} color="#eef7df" castShadow shadow-mapSize={SHADOW_MAP_SIZE} />
+        <directionalLight position={[-5, 1, -4]} intensity={1.85} color="#65c694" />
+        <pointLight position={[0, -1, 5]} intensity={10} color="#f1d79c" />
         <CubeModel {...props} />
-        <ContactShadows position={[0, -2.05, 0]} opacity={0.38} scale={9} blur={2.3} far={4.5} />
+        <ContactShadows position={[0, -2.05, 0]} opacity={0.44} scale={9} blur={2.5} far={4.5} color="#001b12" />
         <OrbitControls enablePan={false} enableZoom enableDamping dampingFactor={0.075} minDistance={5} maxDistance={10} rotateSpeed={0.62} zoomSpeed={0.72} />
       </Canvas>
     </div>

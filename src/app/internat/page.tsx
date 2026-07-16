@@ -12,11 +12,11 @@ const educators = ["Michael Lerchner", "Anja Möllers", "Bastian Pieper", "Danie
 export default function InternatPage() {
   return (
     <>
-      <PageIntro eyebrow="白色面 · INTERNAT" title="寄宿学校" subtitle="Leben und Lernen im Internat" description="寄宿部把共同生活、学习支持和课外成长连接起来。官网强调，学习不仅需要头脑，也需要“Herz und Hände｜心与双手”。" accent="#e2e8f0" />
+      <PageIntro eyebrow="伍 · INTERNAT" title="寄宿学校" subtitle="Leben und Lernen im Internat" description="寄宿部把共同生活、学习支持和课外成长连接起来。官网强调，学习不仅需要头脑，也需要“Herz und Hände｜心与双手”。" accent="#b8cdb3" />
       <section className="mx-auto mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="glass relative min-h-[360px] overflow-hidden rounded-[2rem] sm:min-h-[520px]">
           <Image src={withBasePath("/images/internat-life.jpg")} alt="Pädagogium Bad Sachsa 寄宿学生共同活动的官网照片" fill priority className="object-cover" sizes="100vw" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#070a12] via-[#070a12]/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#03130f] via-[#03130f]/20 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 max-w-3xl p-6 sm:p-10">
             <p className="font-mono text-xs text-slate-300">Schüler*innen im Internat · September 2024</p>
             <h2 className="mt-3 text-3xl font-semibold sm:text-5xl">共同生活，也是教育的一部分</h2>
@@ -31,7 +31,7 @@ export default function InternatPage() {
             { icon: Globe2, title: "多元共同体", text: "官网称寄宿学生来自德国各地，也来自欧洲与亚洲其他国家。" },
           ].map(({ icon: Icon, title, text }) => (
             <article key={title} className="glass-soft rounded-3xl p-6">
-              <Icon className="text-slate-300" size={20} />
+              <Icon className="text-amber-200/65" size={20} />
               <h3 className="mt-4 font-medium text-white">{title}</h3>
               <p className="mt-2 text-sm leading-6 text-slate-400">{text}</p>
             </article>
@@ -51,8 +51,8 @@ export default function InternatPage() {
             <h2 className="mt-3 text-2xl font-semibold">寄宿教育团队</h2>
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {educators.map((name) => (
-                <div key={name} className="flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.03] p-3">
-                  <span className="grid size-9 place-items-center rounded-xl bg-slate-200/10 text-xs font-medium text-slate-200">{name.split(" ").map((part) => part[0]).join("")}</span>
+                <div key={name} className="glass-soft flex items-center gap-3 rounded-2xl p-3">
+                  <span className="grid size-9 place-items-center rounded-xl bg-emerald-200/10 text-xs font-medium text-emerald-50/75 ring-1 ring-emerald-100/10">{name.split(" ").map((part) => part[0]).join("")}</span>
                   <span className="text-sm text-slate-200">{name}</span>
                 </div>
               ))}

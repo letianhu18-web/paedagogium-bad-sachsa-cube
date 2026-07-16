@@ -1,11 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #060913;
-  --foreground: #f5f7ff;
-  --muted: #9aa4b7;
-  --panel: rgba(14, 20, 36, 0.72);
-  --line: rgba(255, 255, 255, 0.1);
+  --background: #03130f;
+  --foreground: #f2f5e9;
+  --muted: #9eb5aa;
+  --panel: rgba(7, 39, 29, 0.72);
+  --line: rgba(203, 232, 213, 0.16);
+  --jade: #52b788;
+  --jade-bright: #94d8b5;
+  --jade-deep: #0d4f3c;
+  --nephrite: #e8eedc;
+  --gold: #d8bb78;
 }
 
 @theme inline {
@@ -24,15 +29,29 @@ html {
 }
 
 body {
+  min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 15% 12%, rgba(41, 98, 255, 0.16), transparent 29rem),
-    radial-gradient(circle at 88% 20%, rgba(16, 185, 129, 0.09), transparent 24rem),
-    radial-gradient(circle at 52% 92%, rgba(255, 73, 73, 0.08), transparent 28rem),
-    var(--background);
+    radial-gradient(circle at 12% 8%, rgba(63, 152, 109, 0.23), transparent 31rem),
+    radial-gradient(circle at 88% 18%, rgba(231, 240, 216, 0.09), transparent 25rem),
+    radial-gradient(circle at 54% 94%, rgba(207, 173, 99, 0.075), transparent 30rem),
+    linear-gradient(145deg, #020d0a 0%, #062119 48%, #020b08 100%);
   color: var(--foreground);
   font-family: "Geist", "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", ui-sans-serif, system-ui, sans-serif;
+}
+
+body::before {
+  position: fixed;
+  z-index: -2;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background:
+    radial-gradient(ellipse at 18% 34%, transparent 55%, rgba(181, 224, 199, 0.045) 56%, transparent 59%) 0 0 / 270px 190px,
+    linear-gradient(118deg, transparent 36%, rgba(211, 235, 220, 0.035) 37%, transparent 39%) 0 0 / 230px 170px;
+  opacity: 0.72;
+  mix-blend-mode: screen;
 }
 
 a,
@@ -41,30 +60,107 @@ input {
   -webkit-tap-highlight-color: transparent;
 }
 
+button,
+a {
+  transition-property: color, background-color, border-color, opacity, transform, box-shadow;
+  transition-duration: 200ms;
+}
+
 ::selection {
-  background: rgba(73, 131, 255, 0.45);
-  color: white;
+  background: rgba(82, 183, 136, 0.42);
+  color: #fbfff7;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #03110d;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid #03110d;
+  border-radius: 999px;
+  background: linear-gradient(var(--jade-deep), #9acbad);
 }
 
 .site-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: linear-gradient(to bottom, black, transparent 86%);
+    radial-gradient(ellipse at center, transparent 61%, rgba(168, 218, 190, 0.055) 62%, transparent 65%),
+    linear-gradient(128deg, transparent 47%, rgba(219, 235, 213, 0.025) 48%, transparent 49%);
+  background-size: 220px 155px, 290px 210px;
+  mask-image: linear-gradient(to bottom, black, transparent 90%);
 }
 
 .glass {
   border: 1px solid var(--line);
-  background: linear-gradient(145deg, rgba(18, 25, 43, 0.82), rgba(10, 15, 28, 0.64));
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(18px);
+  background:
+    radial-gradient(circle at 12% 8%, rgba(181, 229, 204, 0.09), transparent 34%),
+    linear-gradient(145deg, rgba(14, 62, 46, 0.8), rgba(3, 24, 18, 0.79));
+  box-shadow:
+    0 28px 90px rgba(0, 12, 8, 0.46),
+    0 0 0 1px rgba(221, 236, 211, 0.025),
+    inset 0 1px 0 rgba(231, 244, 226, 0.13),
+    inset 0 -18px 40px rgba(0, 17, 12, 0.16);
+  backdrop-filter: blur(22px) saturate(125%);
 }
 
 .glass-soft {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.035);
-  backdrop-filter: blur(12px);
+  border: 1px solid rgba(201, 231, 211, 0.13);
+  background:
+    linear-gradient(145deg, rgba(197, 225, 206, 0.065), rgba(6, 43, 32, 0.16));
+  box-shadow: inset 0 1px 0 rgba(234, 244, 228, 0.06);
+  backdrop-filter: blur(14px) saturate(118%);
+}
+
+.jade-title {
+  background: linear-gradient(110deg, #fbfff6 8%, #bde3cd 48%, #dfc890 88%);
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 12px 42px rgba(88, 190, 139, 0.13);
+}
+
+.jade-control {
+  border: 1px solid rgba(190, 227, 205, 0.16);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(126, 203, 161, 0.1), transparent 36%),
+    rgba(2, 20, 15, 0.78);
+  box-shadow: inset 0 1px 0 rgba(234, 246, 229, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.jade-button-primary {
+  border: 1px solid rgba(217, 235, 209, 0.22);
+  background: linear-gradient(135deg, #3e9f73, #196347);
+  color: #f8fff5;
+  box-shadow: 0 12px 32px rgba(17, 94, 65, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.jade-button-primary:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #55b585, #237153);
+  box-shadow: 0 16px 38px rgba(17, 94, 65, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.jade-button-secondary {
+  border: 1px solid rgba(203, 232, 213, 0.15);
+  background: rgba(218, 237, 216, 0.055);
+  color: rgba(235, 246, 230, 0.8);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055);
+}
+
+.jade-button-secondary:hover {
+  border-color: rgba(216, 187, 120, 0.3);
+  background: rgba(180, 219, 195, 0.1);
+  color: #f8fff3;
+}
+
+.jade-pill {
+  border: 1px solid rgba(178, 224, 199, 0.18);
+  background: rgba(83, 174, 126, 0.08);
+  color: rgba(213, 239, 222, 0.82);
+  box-shadow: inset 0 1px 0 rgba(242, 250, 236, 0.07);
 }
 
 .text-balance {
@@ -72,17 +168,18 @@ input {
 }
 
 .focus-ring:focus-visible {
-  outline: 2px solid #6ea3ff;
+  outline: 2px solid var(--gold);
   outline-offset: 3px;
 }
 
 .particle {
+  box-shadow: 0 0 14px currentColor;
   animation: drift 11s ease-in-out infinite alternate;
 }
 
 @keyframes drift {
-  from { transform: translate3d(0, 0, 0); opacity: 0.22; }
-  to { transform: translate3d(22px, -34px, 0); opacity: 0.7; }
+  from { transform: translate3d(0, 0, 0); opacity: 0.2; }
+  to { transform: translate3d(20px, -32px, 0); opacity: 0.62; }
 }
 
 @media (prefers-reduced-motion: reduce) {

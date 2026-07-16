@@ -28,10 +28,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="min-h-screen antialiased">
         <div className="site-grid pointer-events-none fixed inset-0 -z-20" />
         <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-          <span className="particle absolute left-[8%] top-[18%] size-1 rounded-full bg-blue-300" />
-          <span className="particle absolute left-[78%] top-[26%] size-1.5 rounded-full bg-emerald-300 [animation-delay:2s]" />
-          <span className="particle absolute left-[48%] top-[72%] size-1 rounded-full bg-orange-300 [animation-delay:4s]" />
-          <span className="particle absolute left-[92%] top-[62%] size-1 rounded-full bg-red-300 [animation-delay:6s]" />
+          <span className="particle absolute left-[8%] top-[18%] size-1 rounded-full bg-emerald-200 text-emerald-200" />
+          <span className="particle absolute left-[78%] top-[26%] size-1.5 rounded-full bg-[#e8eedc] text-[#e8eedc] [animation-delay:2s]" />
+          <span className="particle absolute left-[48%] top-[72%] size-1 rounded-full bg-amber-200 text-amber-200 [animation-delay:4s]" />
+          <span className="particle absolute left-[92%] top-[62%] size-1 rounded-full bg-emerald-400 text-emerald-400 [animation-delay:6s]" />
         </div>
         <SiteHeader />
         <main className="min-h-[70vh]">{children}</main>

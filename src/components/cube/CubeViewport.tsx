@@ -11,8 +11,8 @@ const RubiksCubeScene = dynamic(() => import("./RubiksCubeScene").then((module) 
   loading: () => (
     <div className="grid h-full min-h-[600px] place-items-center" role="status">
       <div className="text-center">
-        <div className="mx-auto size-12 animate-spin rounded-2xl border-2 border-blue-400/20 border-t-blue-400" />
-        <p className="mt-4 text-sm text-slate-400">正在加载 3D 魔方…</p>
+        <div className="mx-auto size-12 animate-spin rounded-2xl border-2 border-emerald-200/15 border-t-amber-200 shadow-[0_0_24px_rgba(82,183,136,0.16)]" />
+        <p className="mt-4 text-sm text-emerald-100/55">正在加载 3D 玉石魔方…</p>
       </div>
     </div>
   ),

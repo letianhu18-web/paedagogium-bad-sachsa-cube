@@ -25,15 +25,15 @@ const concepts = [
 export default function SchoolPage() {
   return (
     <>
-      <PageIntro eyebrow="蓝色面 · SCHULE" title="学校介绍" subtitle="Das Internatsgymnasium Pädagogium Bad Sachsa" description="一所国家认可、独立办学并设有寄宿部的 Gymnasium｜文理中学。学校把学术教育、共同生活和个别支持放在同一个校园体系中。" accent="#3b82f6" />
+      <PageIntro eyebrow="壹 · SCHULE" title="学校介绍" subtitle="Das Internatsgymnasium Pädagogium Bad Sachsa" description="一所国家认可、独立办学并设有寄宿部的 Gymnasium｜文理中学。学校把学术教育、共同生活和个别支持放在同一个校园体系中。" accent="#4f9d79" />
 
       <section className="mx-auto mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-3 sm:grid-cols-3">
           {facts.map((fact) => (
             <div key={fact.label} className="glass rounded-3xl p-5 sm:p-6">
-              <p className="text-3xl font-semibold tracking-tight text-white">{fact.value}</p>
-              <p className="mt-2 text-sm text-slate-300">{fact.label}</p>
-              <p className="mt-1 font-mono text-[11px] text-slate-500">{fact.de}</p>
+              <p className="jade-title text-3xl font-semibold tracking-tight">{fact.value}</p>
+              <p className="mt-2 text-sm text-emerald-50/70">{fact.label}</p>
+              <p className="mt-1 font-mono text-[11px] text-emerald-100/35">{fact.de}</p>
             </div>
           ))}
         </div>
@@ -41,15 +41,15 @@ export default function SchoolPage() {
         <div className="mt-6 grid gap-6 lg:grid-cols-[1.08fr_.92fr]">
           <div className="glass relative min-h-[360px] overflow-hidden rounded-[2rem] sm:min-h-[480px]">
             <Image src={withBasePath("/images/school-campus.jpg")} alt="Pädagogium Bad Sachsa 校园主楼与校园环境" fill priority className="object-cover" sizes="(max-width: 1024px) 100vw, 58vw" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#080c17] via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#03130f] via-transparent to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-              <div className="inline-flex items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-xs text-slate-200 backdrop-blur"><MapPin size={13} /> Ostertal · Bad Sachsa</div>
+              <div className="jade-pill inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs backdrop-blur"><MapPin size={13} /> Ostertal · Bad Sachsa</div>
               <p className="mt-3 max-w-xl text-sm leading-6 text-slate-300">图片来自学校官网。学校坐落在 Bad Sachsa 城镇边缘，并作为该区域一所国家认可的私立 Ersatzschule 运行。</p>
             </div>
           </div>
 
           <article className="glass rounded-[2rem] p-6 sm:p-8">
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-blue-300">Was ist das Pädagogium?</p>
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-amber-200/70">Was ist das Pädagogium?</p>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight">传统与现代在同一所学校里</h2>
             <div className="mt-6 space-y-5 text-sm leading-7 text-slate-300 sm:text-base">
               <p>Pädagogium 的前身源于 19 世纪末的 Thüringer Reformpädagogik｜图林根改革教育。如今，它按照下萨克森州学校法开展 5–13 年级教育。</p>
@@ -70,8 +70,8 @@ export default function SchoolPage() {
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {concepts.map(({ icon: Icon, title, text }) => (
-              <article key={title} className="glass-soft rounded-3xl p-6 transition hover:-translate-y-1 hover:bg-white/[0.055]">
-                <span className="grid size-10 place-items-center rounded-2xl bg-blue-500/12 text-blue-300 ring-1 ring-blue-400/20"><Icon size={19} /></span>
+              <article key={title} className="glass-soft rounded-3xl p-6 transition hover:-translate-y-1 hover:border-amber-200/20 hover:bg-emerald-100/[0.07]">
+                <span className="grid size-10 place-items-center rounded-2xl bg-emerald-300/10 text-amber-200 ring-1 ring-emerald-200/18"><Icon size={19} /></span>
                 <h3 className="mt-5 text-lg font-medium text-white">{title}</h3>
                 <p className="mt-3 text-sm leading-6 text-slate-400">{text}</p>
               </article>
